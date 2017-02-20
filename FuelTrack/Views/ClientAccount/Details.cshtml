@@ -1,0 +1,259 @@
+﻿@model FuelTrack.Models.ClientAccount
+
+@{
+    ViewBag.Title = "客户";
+}
+
+<h2>@Html.DisplayFor(model => model.ClientAccountName)</h2>
+
+<div>
+    <h4>客户</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientAccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientAccountId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientAccountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientAccountName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LoanLimit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LoanLimit)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Loan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Loan)
+        </dd>
+
+    </dl>
+
+    <p>
+        @Html.ActionLink("编辑", "Edit", new { id = Model.ClientAccountId }) |
+        @Html.ActionLink("返回列表", "Index")
+    </p>
+    <br/>
+    <br />
+    <h4>未完成订单</h4>
+    <table class="table">
+        <tr>
+            <th>
+                客户订单编号
+            </th>
+            <th>
+                时间
+            </th>
+            <th>
+                油站名称
+            </th>
+            <th>
+                船名
+            </th>
+            <th>
+                起始数量
+            </th>
+            <th>
+                剩余数量
+            </th>
+            <th>
+                售价
+            </th>
+            <th>
+                状态
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Subscriptions)
+        {
+            if (item.State != FuelTrack.Models.ClientSubscriptionState.Closed)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientSubscriptionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Timestamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Station.StationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VesselName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.ActionLink("明细", "Details", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+
+                        @if (item.State == FuelTrack.Models.ClientSubscriptionState.Created)
+                        {
+                            <br /> @Html.ActionLink("付款", "Pay", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                        }
+
+                        @if (item.State == FuelTrack.Models.ClientSubscriptionState.Paid
+        || item.State == FuelTrack.Models.ClientSubscriptionState.PartialDelivered)
+                        {
+                            @*<br /> @Html.ActionLink("交付", "Deliver", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)*@
+                            <br /> @Html.ActionLink("退款", "Refund", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                        }
+
+                        @if (item.State == FuelTrack.Models.ClientSubscriptionState.Delivered
+        || item.State == FuelTrack.Models.ClientSubscriptionState.Refunded)
+                        {
+                            <br /> @Html.ActionLink("完成", "Close", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                        }
+
+                        @if (item.State == FuelTrack.Models.ClientSubscriptionState.Created)
+                        {
+                            <br /> @Html.ActionLink("删除", "Delete", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                        }
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+    @Html.ActionLink("所有客户订单", "Index", "ClientSubscriptions", new { accountId = Model.ClientAccountId }, null) <br />
+    @Html.ActionLink("新建客户订单", "Create", "ClientSubscriptions", new { accountId = Model.ClientAccountId }, null) <br />
+    <hr />
+    <hr />
+    <hr />
+    <h4>近期存款记录</h4>
+    <table class="table">
+        <tr>
+            <th>
+                时间
+            </th>
+            <th>
+                金额
+            </th>
+            <th>
+                变动类型
+            </th>
+            <th>
+                描述
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.BalanceHistory)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BalanceType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("明细", "Details", "ClientBalanceHistories", new { id = item.ClientBalanceHistoryId }, null)
+                </td>
+            </tr>
+        }
+    </table>
+
+    @Html.ActionLink("所有存款记录", "Index", "ClientBalanceHistories", new { accountId = Model.ClientAccountId }, null) <br />
+    @Html.ActionLink("新建存款记录", "Create", "ClientBalanceHistories", new { accountId = Model.ClientAccountId }, null)
+    <hr />
+    <hr />
+    <hr />
+    <h4>未完成贷款</h4>
+    <table class="table">
+        <tr>
+            <th>
+                时间
+            </th>
+            <th>
+                贷款金额
+            </th>
+            <th>
+                剩余金额
+            </th>
+            <th>
+                起始日期
+            </th>
+            <th>
+                不计息天数
+            </th>
+            <th>
+                年利率
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Loans)
+        {
+            if (item.EndDate == null && item.CurrentAmount != 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Timestamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FreeDays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InterestRate)
+                    </td>
+                    <td>
+                        @Html.ActionLink("明细", "Details", "Loans", new { id = item.LoanId }, null) |
+                        @Html.ActionLink("还款", "Repay", "Loans", new { id = item.LoanId }, null) |
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+    @Html.ActionLink("所有贷款", "Index", "Loans", new { accountId = Model.ClientAccountId }, null)<br />
+    @Html.ActionLink("新建贷款", "Create", "Loans", new { accountId = Model.ClientAccountId }, null)
+
+</div>

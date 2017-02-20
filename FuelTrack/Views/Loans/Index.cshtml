@@ -1,0 +1,76 @@
+﻿@model IEnumerable<FuelTrack.Models.Loan>
+
+@{
+    ViewBag.Title = "贷款列表";
+}
+
+<h2>贷款列表</h2>
+
+<p>
+    @Html.ActionLink("新建贷款", "Create", new { accountId = ViewBag.ClientAccountId })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FreeDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InterestRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FreeDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InterestRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.ActionLink("还款", "Repay", new { id = item.LoanId }) |
+                @Html.ActionLink("明细", "Details", new { id = item.LoanId }) |
+                @Html.ActionLink("删除", "Delete", new { id = item.LoanId })
+            </td>
+        </tr>
+    }
+
+</table>

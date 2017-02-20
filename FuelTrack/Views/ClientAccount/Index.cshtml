@@ -1,0 +1,55 @@
+﻿@model IEnumerable<FuelTrack.Models.ClientAccount>
+
+@{
+    ViewBag.Title = "客户列表";
+}
+
+<h2>客户列表</h2>
+
+<p>
+    @Html.ActionLink("创建新客户", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ClientAccountId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClientAccountName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Loan)
+        </th>
+        <th>
+            操作
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientAccountId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientAccountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Loan)
+            </td>
+            <td>
+                @Html.ActionLink("明细", "Details", new { id = item.ClientAccountId }) |
+                @Html.ActionLink("新建订单", "Create", "ClientSubscriptions", new { accountId = item.ClientAccountId }, null)|
+                @Html.ActionLink("变更存款", "Create", "ClientBalanceHistories", new { accountId = item.ClientAccountId }, null)|
+                @Html.ActionLink("贷款", "Create", "Loans", new { accountId = item.ClientAccountId }, null)
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,166 @@
+﻿@model FuelTrack.Models.StationAccount
+
+@{
+    ViewBag.Title = "油站明细";
+}
+
+<h2>明细</h2>
+
+<div>
+    <h4>油站</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StationAccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StationAccountId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StationName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Deposite)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Deposite)
+        </dd>
+    </dl>
+    <h4>未完成订单</h4>
+    <table class="table">
+        <tr>
+            <th>
+                时间
+            </th>
+            <th>
+                油站名称
+            </th>
+            <th>
+                启示数量
+            </th>
+            <th>
+                剩余数量
+            </th>
+            <th>
+                原价
+            </th>
+            <th>
+                状态
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Subscriptions)
+        {
+            if (item.State != FuelTrack.Models.SubscriptionState.Closed)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Timestamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Station.StationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrentQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.ActionLink("明细", "Details", "Subscriptions", new { id = item.SubscriptionId }, null)
+
+                        @if (item.State == FuelTrack.Models.SubscriptionState.Created)
+                        {
+                            <br /> @Html.ActionLink("付款", "Pay", "Subscriptions", new { id = item.SubscriptionId }, null)
+                        }
+
+                        @if (item.State == FuelTrack.Models.SubscriptionState.Paid
+    || item.State == FuelTrack.Models.SubscriptionState.PartialDelivered)
+                        {
+                            <br /> @Html.ActionLink("交付", "Deliver", "Subscriptions", new { id = item.SubscriptionId }, null)
+                            <br /> @Html.ActionLink("退款", "Refund", "Subscriptions", new { id = item.SubscriptionId }, null)
+                        }
+
+                        @if (item.State == FuelTrack.Models.SubscriptionState.Delivered
+    || item.State == FuelTrack.Models.SubscriptionState.Refunded)
+                        {
+                            <br /> @Html.ActionLink("完成", "Close", "Subscriptions", new { id = item.SubscriptionId }, null)
+                        }
+
+                        @if (item.State == FuelTrack.Models.SubscriptionState.Created)
+                        {
+                            <br /> @Html.ActionLink("删除", "Delete", "Subscriptions", new { id = item.SubscriptionId }, null)
+                        }
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+    @Html.ActionLink("所有订单", "Index", "Subscriptions", new { accountId = Model.StationAccountId }, null) <br />
+    @Html.ActionLink("新建", "Create", "Subscriptions", new { accountId = Model.StationAccountId }, null) <br />
+    <hr />
+    <hr />
+    <hr /><h4>最近余额</h4>
+<table class="table">
+    <tr>
+        <th>
+            时间
+        </th>
+        <th>
+            金额
+        </th>
+        <th>
+            变更类型
+        </th>
+        <th>
+            描述
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.DepositeHistory.OrderByDescending(d=>d.Timestamp))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChangeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.ActionLink("明细", "Details", "Deposites", new { id = item.DepositeHistoryId }, null)
+            </td>
+        </tr>
+    }
+</table>
+
+    @Html.ActionLink("所有余额记录", "Index", "Deposites", new { accountId = Model.StationAccountId }, null)
+    @Html.ActionLink("充值", "Recharge", "Deposites", new { accountId = Model.StationAccountId }, null)
+<hr />
+<hr />
+<hr />
+</div>
+<p>
+    @Html.ActionLink("编辑", "Edit", new { id = Model.StationAccountId }) |
+    @Html.ActionLink("返回列表", "Index")
+</p>

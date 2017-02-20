@@ -1,0 +1,97 @@
+﻿@model IEnumerable<FuelTrack.Models.ClientSubscription>
+
+@{
+    ViewBag.Title = "客户订单列表";
+}
+
+<h2>客户订单列表</h2>
+
+<p>
+    @Html.ActionLink("新建客户订单", "Create", new { accountId = ViewBag.ClientAccountId })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Client.ClientAccountName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VesselName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.ClientAccountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Station.StationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VesselName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.ActionLink("明细", "Details", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+
+                @if (item.State == FuelTrack.Models.ClientSubscriptionState.Created)
+                {
+                    <br /> @Html.ActionLink("支付", "Pay", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                }
+
+                @if (item.State == FuelTrack.Models.ClientSubscriptionState.Paid
+                    || item.State == FuelTrack.Models.ClientSubscriptionState.PartialDelivered)
+                {
+                    @*<br /> @Html.ActionLink("交付", "Deliver", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)*@
+                    <br /> @Html.ActionLink("退款", "Refund", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                }
+
+                @if (item.State == FuelTrack.Models.ClientSubscriptionState.Delivered
+                    || item.State == FuelTrack.Models.ClientSubscriptionState.Refunded)
+                {
+                    <br /> @Html.ActionLink("关闭", "Close", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                }
+
+                @if (item.State == FuelTrack.Models.ClientSubscriptionState.Created)
+                {
+                    <br /> @Html.ActionLink("删除", "Delete", "ClientSubscriptions", new { id = item.ClientSubscriptionId }, null)
+                }
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,135 @@
+﻿@model FuelTrack.Models.Subscription
+
+@{
+    ViewBag.Title = "订单明细";
+}
+
+<h2>明细</h2>
+
+<div>
+    <h4>订单</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station.StationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UnitPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+
+    </dl>
+
+    <h4>历史</h4>
+    <table class="table">
+        <tr>
+            <th>
+                数量
+            </th>
+            <th>
+                原价
+            </th>
+            <th>
+                客户订单编号
+            </th>
+            <th>
+                客户名称
+            </th>
+            <th>
+                船名
+            </th>
+            <th>
+                时间
+            </th>
+            <th>
+                状态
+            </th>
+            <th>
+                备注
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.History)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientSubscriptionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientAccountName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VesselName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("返回列表", "Index", new { accountId = Model.SubscriptionId })
+</p>

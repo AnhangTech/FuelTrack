@@ -1,0 +1,110 @@
+﻿@model FuelTrack.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "主页";
+}
+
+<div class="jumbotron">
+    <h1>加油记录</h1>
+    <p class="lead">这个站点是用来记录加油金融数据的.</p>
+</div>
+
+            @if (Model.DueSoonLoans.Count > 0 || Model.DueLoans.Count >0)
+            {
+
+                <p class="lead">临近计息贷款（黄色）或开始计息贷款（红色）</p>
+            <div>
+                <table class="table">
+                    <tr>
+                       <th>
+                           客户
+                        </th>
+                        <th>
+                            借款金额
+                        </th>
+                        <th>
+                            未还金额
+                        </th>
+                        <th>
+                            借款日期
+                        </th>
+                        <th>
+                            免息天数
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model.DueSoonLoans)
+                    {
+                        <tr class="alert-warning">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Client.ClientAccountName)
+                            </td>                        
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CurrentAmount)
+                            </td>                        
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FreeDays)
+                            </td>
+                            <td>
+                                @Html.ActionLink("还款", "Repay", "Loans", new { id = item.LoanId }, null) |
+                                @Html.ActionLink("明细", "Details", "Loans", new { id = item.LoanId }, null) |
+                                @Html.ActionLink("删除", "Delete", "Loans", new { id = item.LoanId }, null)
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var item in Model.DueLoans)
+                    {
+                        <tr class="alert-danger">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Client.ClientAccountName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CurrentAmount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FreeDays)
+                            </td>
+                            <td>
+                                @Html.ActionLink("还款", "Repay", "Loans", new { id = item.LoanId }, null) |
+                                @Html.ActionLink("明细", "Details", "Loans", new { id = item.LoanId }, null) |
+                                @Html.ActionLink("删除", "Delete", "Loans", new { id = item.LoanId }, null)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+            }
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>客户</h2>
+                    <p>
+                        记录客户充值，下单，退款，贷款。
+                    </p>
+                    <p>@Html.ActionLink("所有客户", "Index", "ClientAccount")</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>油站</h2>
+                    <p>记录在油站的余额，下单，退款。</p>
+                    <p>@Html.ActionLink("所有油站", "Index", "StationAccounts")</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>统计</h2>
+                    <p>客户、油站和船舶的统计结果</p>
+                    <p>@Html.ActionLink("油站统计", "Query", "StationStatistics") | @Html.ActionLink("客户统计", "Query", "ClientStatistics") | @Html.ActionLink("船舶统计", "Query", "VesselStatistics")</p>
+                </div>
+            </div>

@@ -1,0 +1,90 @@
+﻿@model FuelTrack.Models.StationStatisticsViewModel
+
+@{
+    ViewBag.Title = "油站统计结果";
+}
+
+<h2>油站统计结果</h2>
+
+<div>
+    <h4>明细</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StationAccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StationAccountId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StationAccountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StationAccountName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalIncreasedSubscriptionAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalIncreasedSubscriptionAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalPaidAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalPaidAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalIncompleteQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalIncompleteQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalIncreasedBalance)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalIncreasedBalance)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalIncreasedLoan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalIncreasedLoan)
+        </dd>
+    </dl>
+
+
+</div>
+<p>
+    @Html.ActionLink("返回", "Query")
+</p>

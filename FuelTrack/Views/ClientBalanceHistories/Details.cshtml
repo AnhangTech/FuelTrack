@@ -1,0 +1,49 @@
+﻿@model FuelTrack.Models.ClientBalanceHistory
+
+@{
+    ViewBag.Title = "客户存款变更明细";
+}
+
+<h2>客户存款变更明细</h2>
+
+<div>
+    <h4>客户存款变更明细</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BalanceType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BalanceType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("返回客户信息", "Index", "ClientAccount", new { id = Model.ClientAccountId }, null)
+</p>

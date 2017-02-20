@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FuelTrack.Models.ClientBalanceHistory>
+
+@{
+    ViewBag.Title = "存款历史列表";
+}
+
+<h2>存款历史列表</h2>
+
+<p>
+    @Html.ActionLink("添加变更", "Create", new { accountId = ViewBag.ClientAccountId })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BalanceType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Timestamp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BalanceType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("明细", "Details", new { id=item.ClientBalanceHistoryId }) |
+        </td>
+    </tr>
+}
+
+</table>

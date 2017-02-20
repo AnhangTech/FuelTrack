@@ -1,0 +1,56 @@
+﻿@model IEnumerable<FuelTrack.Models.DepositeHistory>
+
+@{
+    ViewBag.Title = "余款历史列表";
+}
+
+<h2>余款历史列表</h2>
+
+<p>
+        @Html.ActionLink("充值", "Recharge", new { accountId = ViewBag.StationAccountId })<br />
+        @Html.ActionLink("退款", "Cashout", new { accountId = ViewBag.StationAccountId })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ChangeType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Station.StationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ChangeType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Timestamp)
+        </td>
+        <td>
+            @Html.ActionLink("明细", "Details", new { id=item.DepositeHistoryId })
+        </td>
+    </tr>
+}
+
+</table>

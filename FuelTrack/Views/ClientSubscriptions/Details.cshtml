@@ -1,0 +1,157 @@
+﻿@model FuelTrack.Models.ClientSubscription
+
+@{
+    ViewBag.Title = "客户订单明细";
+}
+
+<h2>客户订单明细</h2>
+
+<div>
+    <h4>客户订单</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientSubscriptionId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ClientSubscriptionId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientAccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClientAccountId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StationAccountId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StationAccountId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VesselName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VesselName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UnitPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+        <dt>
+            操作
+        </dt>
+
+        <dd>
+            @Html.ActionLink("明细", "Details", "ClientSubscriptions", new { id = Model.ClientSubscriptionId }, null)
+
+            @if (Model.State == FuelTrack.Models.ClientSubscriptionState.Created)
+            {
+                <br /> @Html.ActionLink("支付", "Pay", "ClientSubscriptions", new { id = Model.ClientSubscriptionId }, null)
+            }
+
+            @if (Model.State == FuelTrack.Models.ClientSubscriptionState.Paid
+                    || Model.State == FuelTrack.Models.ClientSubscriptionState.PartialDelivered)
+            {
+                <br /> @Html.ActionLink("交付", "Deliver", "ClientSubscriptions", new { id = Model.ClientSubscriptionId }, null)
+                <br /> @Html.ActionLink("退款", "Refund", "ClientSubscriptions", new { id = Model.ClientSubscriptionId }, null)
+            }
+
+            @if (Model.State == FuelTrack.Models.ClientSubscriptionState.Delivered
+                    || Model.State == FuelTrack.Models.ClientSubscriptionState.Refunded)
+            {
+                <br /> @Html.ActionLink("关闭", "Close", "ClientSubscriptions", new { id = Model.ClientSubscriptionId }, null)
+            }
+
+            @if (Model.State == FuelTrack.Models.ClientSubscriptionState.Created)
+            {
+                <br /> @Html.ActionLink("删除", "Delete", "ClientSubscriptions", new { id = Model.ClientSubscriptionId }, null)
+            }
+        </dd>
+
+    </dl>
+
+    <h4>历史</h4>
+    <table class="table">
+        <tr>
+            <th>
+                数量
+            </th>
+            <th>
+                售价
+            </th>
+            <th>
+                时间
+            </th>
+            <th>
+                状态
+            </th>
+            <th>
+                备注
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.History)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("返回列表", "Index", new { accountId = Model.ClientAccountId })
+</p>

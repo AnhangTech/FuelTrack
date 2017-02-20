@@ -1,0 +1,129 @@
+﻿@model FuelTrack.Models.Loan
+
+@{
+    ViewBag.Title = "贷款明细";
+}
+
+<h2>贷款明细</h2>
+
+<div>
+    <h4>贷款</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Client.ClientAccountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Client.ClientAccountName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FreeDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FreeDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InterestRate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InterestRate)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+
+    </dl>
+
+    <h4>历史</h4>
+    <table class="table">
+        <tr>
+            <th>
+                时间
+            </th>
+            <th>
+                日期
+            </th>
+            <th>
+                金额
+            </th>
+            <th>
+                利息
+            </th>
+            <th>
+                备注
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Histories)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DealDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Interest)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Notes)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("返回列表", "Index")
+</p>

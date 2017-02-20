@@ -1,0 +1,90 @@
+﻿@model IEnumerable<FuelTrack.Models.Subscription>
+
+@{
+    ViewBag.Title = "订单列表";
+}
+
+<h2>列表</h2>
+
+<p>
+    @Html.ActionLink("新建订单", "Create", new { accountId = ViewBag.StationAccountId })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Station.StationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartQuantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentQuantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UnitPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Timestamp)
+        </td>
+        <td>
+            @Html.ActionLink("明细", "Details", "Subscriptions", new { id = item.SubscriptionId }, null)
+
+            @if (item.State == FuelTrack.Models.SubscriptionState.Created)
+                {
+                <br /> @Html.ActionLink("支付", "Pay", "Subscriptions", new { id = item.SubscriptionId }, null)
+            }
+
+            @if (item.State == FuelTrack.Models.SubscriptionState.Paid
+                        || item.State == FuelTrack.Models.SubscriptionState.PartialDelivered)
+            {
+                <br /> @Html.ActionLink("交付", "Deliver", "Subscriptions", new { id = item.SubscriptionId }, null)
+                <br /> @Html.ActionLink("退款", "Refund", "Subscriptions", new { id = item.SubscriptionId }, null)
+            }
+
+            @if (item.State == FuelTrack.Models.SubscriptionState.Delivered
+                        || item.State == FuelTrack.Models.SubscriptionState.Refunded)
+            {
+                <br /> @Html.ActionLink("完成", "Close", "Subscriptions", new { id = item.SubscriptionId }, null)
+            }
+
+            @if (item.State == FuelTrack.Models.SubscriptionState.Created)
+                {
+                <br /> @Html.ActionLink("删除", "Delete", "Subscriptions", new { id = item.SubscriptionId }, null)
+            }
+        </td>
+    </tr>
+}
+
+</table>

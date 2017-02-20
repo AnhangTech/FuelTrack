@@ -1,0 +1,48 @@
+﻿@model IEnumerable<FuelTrack.Models.StationAccount>
+
+@{
+    ViewBag.Title = "油站列表";
+}
+
+<h2>列表</h2>
+
+<p>
+    @Html.ActionLink("新建油站", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StationAccountId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Deposite)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StationAccountId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deposite)
+            </td>
+            <td>
+                @Html.ActionLink("编辑", "Edit", new { id = item.StationAccountId }) |
+                @Html.ActionLink("明细", "Details", new { id = item.StationAccountId }) |
+                @Html.ActionLink("新建订单", "Create", "Subscriptions", new { accountId = item.StationAccountId }, null)|
+                @Html.ActionLink("充值", "Recharge", "Deposites", new { accountId = item.StationAccountId }, null)|
+                @Html.ActionLink("删除", "Delete", new { id = item.StationAccountId })
+            </td>
+        </tr>
+    }
+
+</table>

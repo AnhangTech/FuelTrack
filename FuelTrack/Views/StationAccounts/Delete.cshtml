@@ -1,0 +1,32 @@
+﻿@model FuelTrack.Models.StationAccount
+
+@{
+    ViewBag.Title = "删除油站";
+}
+
+<h2>删除</h2>
+
+<h3>你确定要删除?</h3>
+<div>
+    <h4>油站</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StationName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("返回列表", "Index")
+        </div>
+    }
+</div>
