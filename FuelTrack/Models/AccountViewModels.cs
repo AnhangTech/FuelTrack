@@ -6,7 +6,7 @@ namespace FuelTrack.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "PhoneNumber")]
+        [Display(Name = "电话号码")]
         public string PhoneNumber { get; set; }
     }
 
@@ -42,50 +42,50 @@ namespace FuelTrack.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "PhoneNumber")]
+        [Display(Name = "电话号码")]
         public string PhoneNumber { get; set; }
     }
 
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "PhoneNumber")]
+        [Display(Name = "电话号码")]
         [Phone]
         public string PhoneNumber { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "密码")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "记住我?")]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name ="DisplayName")]
+        [Display(Name = "显示姓名")]
         public string UserName { get; set;}
 
         [Required]
         [Phone]
-        [Display(Name = "PhoneNumber")]
+        [Display(Name = "电话号码")]
         public string PhoneNumber { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "密码")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "确认密码")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         [Required]
-        [Display(Name ="Role")]
+        [Display(Name = "角色")]
         public string Role { get; set; }
     }
 
@@ -93,17 +93,17 @@ namespace FuelTrack.Models
     {
         [Required]
         [Phone]
-        [Display(Name = "PhoneNumber")]
+        [Display(Name = "电话号码")]
         public string PhoneNumber { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "密码")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "确认密码")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
@@ -114,7 +114,7 @@ namespace FuelTrack.Models
     {
         [Required]
         [Phone]
-        [Display(Name = "PhoneNumber")]
+        [Display(Name = "电话号码")]
         public string PhoneNumber { get; set; }
     }
 }

@@ -305,6 +305,10 @@
     <Compile Include="Migrations\201611040359411_addloadtype.Designer.cs">
       <DependentUpon>201611040359411_addloadtype.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201702211024539_AddPaymentRequest.cs" />
+    <Compile Include="Migrations\201702211024539_AddPaymentRequest.Designer.cs">
+      <DependentUpon>201702211024539_AddPaymentRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientAccount.cs" />
@@ -563,6 +567,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611040359411_addloadtype.resx">
       <DependentUpon>201611040359411_addloadtype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702211024539_AddPaymentRequest.resx">
+      <DependentUpon>201702211024539_AddPaymentRequest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
