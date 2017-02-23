@@ -46,6 +46,7 @@ namespace FuelTrack.Controllers
 
         // POST: ClientAccount/Create
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public ActionResult Create([Bind(Include = "ClientAccountName,LoanLimit", Exclude = "Balance")]ClientAccount account)
         {
             if (ModelState.IsValid)
@@ -61,6 +62,7 @@ namespace FuelTrack.Controllers
         }
 
         // GET: ClientAccount/Edit/5
+        [Authorize(Roles = "Employee")]
         public ActionResult Edit(long? id)
         {
             if (id == null)
@@ -77,6 +79,7 @@ namespace FuelTrack.Controllers
 
         // POST: ClientAccount/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public ActionResult Edit(long id, [Bind(Include = "ClientAccountName,LoanLimit", Exclude = "Balance")]ClientAccount account)
         {
             if (ModelState.IsValid)
@@ -100,6 +103,7 @@ namespace FuelTrack.Controllers
         }
 
         // GET: ClientAccount/Delete/5
+        [Authorize(Roles = "Employee")]
         public ActionResult Delete(long? id)
         {
             if (id == null)
@@ -117,6 +121,7 @@ namespace FuelTrack.Controllers
 
         // POST: ClientSubscriptions/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Employee")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
