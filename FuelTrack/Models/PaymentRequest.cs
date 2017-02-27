@@ -87,6 +87,15 @@ namespace FuelTrack.Models
 
         [DisplayName("请款事由")]
         public string Reason { get; set; }
+
+        [DisplayName("油站银行账户名")]
+        public string BankAccountName { get; set; }
+
+        [DisplayName("油站银行账号")]
+        public string BankAccountNumber { get; set; }
+
+        [DisplayName("油站银行支行名称")]
+        public string BankBranch { get; set; }
     }
 
     public class PaymentRequestFinanceManagerApproveViewModel
@@ -100,6 +109,15 @@ namespace FuelTrack.Models
         [DisplayName("油站")]
         [ForeignKey("StationAccountId")]
         public virtual StationAccount Station { get; set; }
+
+        [DisplayName("油站银行账户名")]
+        public string BankAccountName { get; set; }
+
+        [DisplayName("油站银行账号")]
+        public string BankAccountNumber { get; set; }
+
+        [DisplayName("油站银行支行名称")]
+        public string BankBranch { get; set; }
 
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
@@ -142,6 +160,15 @@ namespace FuelTrack.Models
         [DisplayName("请款状态")]
         public PaymentRequestState State { get; set; }
 
+        [DisplayName("油站银行账户名")]
+        public string BankAccountName { get; set; }
+
+        [DisplayName("油站银行账号")]
+        public string BankAccountNumber { get; set; }
+
+        [DisplayName("油站银行支行名称")]
+        public string BankBranch { get; set; }
+
         [DisplayName("请款事由")]
         public string Reason { get; set; }
 
@@ -179,6 +206,15 @@ namespace FuelTrack.Models
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
         public double Amount { get; set; }
+
+        [DisplayName("油站银行账户名")]
+        public string BankAccountName { get; set; }
+
+        [DisplayName("油站银行账号")]
+        public string BankAccountNumber { get; set; }
+
+        [DisplayName("油站银行支行名称")]
+        public string BankBranch { get; set; }
 
         [DisplayName("请款状态")]
         public PaymentRequestState State { get; set; }

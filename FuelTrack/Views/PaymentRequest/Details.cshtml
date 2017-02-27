@@ -1,0 +1,140 @@
+﻿@model FuelTrack.Models.PaymentRequest
+
+<div>
+    <h4>PaymentRequest</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station.StationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTimestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartTimestamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinanceManagerId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinanceManagerId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinanceManagerComments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinanceManagerComments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinanceManagerCommentsTimestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinanceManagerCommentsTimestamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessManagerId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessManagerId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessManagerComments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessManagerComments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessManagerCommentsTimestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessManagerCommentsTimestamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankAccountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankAccountName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankAccountNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankAccountNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankBranch)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankBranch)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.PaymentRequestId }) |*@
+    @Html.ActionLink("返回列表", "Index", new { accountId = Model.StationAccountId })
+</p>

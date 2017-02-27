@@ -1,68 +1,39 @@
 ﻿@model IEnumerable<FuelTrack.Models.PaymentRequest>
 
 @{
-    ViewBag.Title = "客户订单列表";
+    ViewBag.Title = "请款单列表";
 }
 
 <h2>客户订单列表</h2>
 
 <p>
-    @Html.ActionLink("新建客户订单", "Create", new { accountId = ViewBag.ClientAccountId })
+    @Html.ActionLink("新建请款单", "Apply", new { stationId = ViewBag.StationAccountId })
 </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Station.StationName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reason)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTimestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FinanceManagerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FinanceManagerComments)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FinanceManagerCommentsTimestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BusinessManagerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BusinessManagerComments)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BusinessManagerCommentsTimestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BankAccountName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BankAccountNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BankBranch)
-            </th>
-            <th></th>
-        </tr>
-    
-    @foreach (var item in Model) {
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartTimestamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BankBranch)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Station.StationName)
@@ -77,49 +48,30 @@
                 @Html.DisplayFor(modelItem => item.Reason)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.StartTimestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinanceManagerId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinanceManagerComments)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinanceManagerCommentsTimestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BusinessManagerId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BusinessManagerComments)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BusinessManagerCommentsTimestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BankAccountName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BankAccountNumber)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BankBranch)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.PaymentRequestId }) |
-                @Html.ActionLink("Details", "Details", new { id=item.PaymentRequestId }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.PaymentRequestId })
+                @if (ViewContext.HttpContext.User.IsInRole("Employee"))
+                {
+                    @Html.ActionLink("取消", "Withdrawed", new { id = item.PaymentRequestId }); @Html.Label("|");
+                }
+
+                @if (ViewContext.HttpContext.User.IsInRole("FinanceManager"))
+                {
+                    @Html.ActionLink("财务审批", "FinancialApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
+                }
+
+                @if (ViewContext.HttpContext.User.IsInRole("BusinessManager"))
+                {
+                    @Html.ActionLink("业务审批", "BusinessApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
+                }
+
+                @Html.ActionLink("明细", "Details", new { id = item.PaymentRequestId })
             </td>
         </tr>
     }
-    
-    </table>
-</body>
-</html>
+
+</table>

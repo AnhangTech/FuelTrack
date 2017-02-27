@@ -40,6 +40,7 @@
                 @Html.ActionLink("明细", "Details", new { id = item.StationAccountId }) |
                 @Html.ActionLink("新建订单", "Create", "Subscriptions", new { accountId = item.StationAccountId }, null)|
                 @Html.ActionLink("充值", "Recharge", "Deposites", new { accountId = item.StationAccountId }, null)|
+                @Html.ActionLink("请款", "Index", "PaymentRequest", new { accountId = item.StationAccountId }, null)|
                 @Html.ActionLink("删除", "Delete", new { id = item.StationAccountId })
             </td>
         </tr>
