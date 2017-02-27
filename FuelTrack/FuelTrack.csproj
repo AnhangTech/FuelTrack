@@ -489,6 +489,8 @@
     <Content Include="Views\PaymentRequest\Apply.cshtml" />
     <Content Include="Views\PaymentRequest\Index.cshtml" />
     <Content Include="Views\PaymentRequest\Details.cshtml" />
+    <Content Include="Views\PaymentRequest\FinanceApprove.cshtml" />
+    <Content Include="Views\PaymentRequest\BusinessApprove.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

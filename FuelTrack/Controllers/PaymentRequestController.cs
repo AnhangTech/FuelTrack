@@ -1,10 +1,12 @@
 ﻿using FuelTrack.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace FuelTrack.Controllers
 {
@@ -77,14 +79,15 @@ namespace FuelTrack.Controllers
                 db.PaymentRequests.Add(
                     new PaymentRequest()
                     {
-                         StationAccountId = paymentRequest.StationAccountId,
-                         Amount = paymentRequest.Amount,
-                         Reason = paymentRequest.Reason,
-                         StartTimestamp = DateTime.Now,
-                         BankBranch = paymentRequest.BankBranch,
-                         BankAccountName = paymentRequest.BankAccountName,
-                         BankAccountNumber = paymentRequest.BankAccountNumber,
-                         State = PaymentRequestState.Start
+                        StationAccountId = paymentRequest.StationAccountId,
+                        Amount = paymentRequest.Amount,
+                        Reason = paymentRequest.Reason,
+                        EmployeeId = (string)Membership.GetUser().ProviderUserKey,
+                        StartTimestamp = DateTime.Now,
+                        BankBranch = paymentRequest.BankBranch,
+                        BankAccountName = paymentRequest.BankAccountName,
+                        BankAccountNumber = paymentRequest.BankAccountNumber,
+                        State = PaymentRequestState.Start
                     }
                     );
                 db.SaveChanges();
@@ -93,6 +96,151 @@ namespace FuelTrack.Controllers
             }
 
             return View(paymentRequest.StationAccountId);
+        }
+
+        // GET: PaymentRequest
+        public ActionResult FinanceApprove(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            PaymentRequest paymentRequest = db.PaymentRequests.Find(id.Value);
+
+            if (paymentRequest == null)
+            {
+                return HttpNotFound("请款单未找到.");
+            }
+
+            var yesOrNo = new SelectList(
+                new List<SelectListItem>() {
+                    new SelectListItem() { Text = "否", Value = "No" },
+                    new SelectListItem() { Text = "是", Value = "Yes" } },
+                "Value",
+                "Text",
+                0);
+
+            PaymentRequestFinanceManagerApproveViewModel model = new PaymentRequestFinanceManagerApproveViewModel()
+            {
+                Amount = paymentRequest.Amount,
+                BankAccountName = paymentRequest.BankAccountName,
+                BankAccountNumber = paymentRequest.BankAccountNumber,
+                BankBranch = paymentRequest.BankBranch,
+                Employee = Membership.GetUser(Guid.Parse(paymentRequest.EmployeeId)).UserName,
+                PaymentRequestId = paymentRequest.PaymentRequestId,
+                Reason = paymentRequest.Reason,
+                StartTimestamp = paymentRequest.StartTimestamp,
+                StationAccountId = paymentRequest.StationAccountId,
+                Station = db.StationAccounts.Find(paymentRequest.StationAccountId),
+                YesOrNo = yesOrNo
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FinanceApprove([Bind(Include = "StationAccountId, PaymentRequestId, FinanceManagerComments, IsApprove")] PaymentRequestFinanceManagerApproveViewModel financeApprove)
+        {
+            if (ModelState.IsValid)
+            {
+                PaymentRequest request = db.PaymentRequests.Find(financeApprove.PaymentRequestId);
+
+                request.FinanceManagerComments = financeApprove.FinanceManagerComments;
+
+                if(financeApprove.IsApprove == "Yes")
+                {
+                    request.State = PaymentRequestState.FinanceManagerApproved;
+                }
+                else
+                {
+                    request.State = PaymentRequestState.FinanceManagerRejected;
+                }
+
+                request.FinanceManagerCommentsTimestamp = DateTime.Now;
+                request.FinanceManagerId = (string)Membership.GetUser().ProviderUserKey;          
+
+                db.Entry(request).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index", new { accountId = financeApprove.StationAccountId });
+        }
+
+        // GET: PaymentRequest
+        public ActionResult BusinessApprove(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            PaymentRequest paymentRequest = db.PaymentRequests.Find(id.Value);
+
+            if (paymentRequest == null)
+            {
+                return HttpNotFound("请款单未找到.");
+            }
+
+            var yesOrNo = new SelectList(
+                new List<SelectListItem>() {
+                    new SelectListItem() { Text = "否", Value = "No" },
+                    new SelectListItem() { Text = "是", Value = "Yes" } },
+                "Value",
+                "Text",
+                0);
+
+            PaymentRequestBusinessManagerApproveViewModel model = new PaymentRequestBusinessManagerApproveViewModel()
+            {
+                Amount = paymentRequest.Amount,
+                BankAccountName = paymentRequest.BankAccountName,
+                BankAccountNumber = paymentRequest.BankAccountNumber,
+                BankBranch = paymentRequest.BankBranch,
+                Employee = Membership.GetUser(Guid.Parse(paymentRequest.EmployeeId)).UserName,
+                FinanceManager = Membership.GetUser(Guid.Parse(paymentRequest.FinanceManagerId)).UserName,
+                FinanceManagerComments = paymentRequest.FinanceManagerComments,
+                FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
+                PaymentRequestId = paymentRequest.PaymentRequestId,
+                Reason = paymentRequest.Reason,
+                StartTimestamp = paymentRequest.StartTimestamp,
+                StationAccountId = paymentRequest.StationAccountId,
+                Station = db.StationAccounts.Find(paymentRequest.StationAccountId),
+                YesOrNo = yesOrNo
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult BusinessApprove([Bind(Include = "StationAccountId, PaymentRequestId, BusinessManagerComments, IsApprove")] PaymentRequestBusinessManagerApproveViewModel businessApprove)
+        {
+            if (ModelState.IsValid)
+            {
+                PaymentRequest request = db.PaymentRequests.Find(businessApprove.PaymentRequestId);
+
+                request.BusinessManagerComments = businessApprove.FinanceManagerComments;
+
+                if (businessApprove.IsApprove == "Yes")
+                {
+                    request.State = PaymentRequestState.BusinessManagerApproved;
+                }
+                else
+                {
+                    request.State = PaymentRequestState.BusinessManagerApproved;
+                }
+
+                request.BusinessManagerCommentsTimestamp = DateTime.Now;
+
+
+                db.Entry(request).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index", new { accountId = businessApprove.StationAccountId });
         }
     }
 }

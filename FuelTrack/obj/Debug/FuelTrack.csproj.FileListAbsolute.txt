@@ -194,4 +194,3 @@ C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.csproj.GenerateResource.Cache
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.dll
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.pdb
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.AddPaymentRequest.resources
-C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.csprojResolveAssemblyReference.cache

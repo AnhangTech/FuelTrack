@@ -56,7 +56,7 @@
             <td>
                 @if (ViewContext.HttpContext.User.IsInRole("Employee"))
                 {
-                    @Html.ActionLink("取消", "Withdrawed", new { id = item.PaymentRequestId }); @Html.Label("|");
+                    @Html.ActionLink("取消", "Withdraw", new { id = item.PaymentRequestId }); @Html.Label("|");
                 }
 
                 @if (ViewContext.HttpContext.User.IsInRole("FinanceManager"))
