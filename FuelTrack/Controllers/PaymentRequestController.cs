@@ -1,4 +1,6 @@
 ﻿using FuelTrack.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,6 +16,7 @@ namespace FuelTrack.Controllers
     public class PaymentRequestController : Controller
     {
         private FuelTrackContext db = new FuelTrackContext();
+        private ApplicationUserManager userManager = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
         // GET: Deposites
         public ActionResult Index(long? accountId)
@@ -43,7 +46,29 @@ namespace FuelTrack.Controllers
             {
                 return HttpNotFound();
             }
-            return View(paymentRequest);
+            return View(new PaymentRequestDetailsViewModel()
+            {
+                Amount = paymentRequest.Amount,
+                BankAccountName = paymentRequest.BankAccountName,
+                BankAccountNumber = paymentRequest.BankAccountNumber,
+                BankBranch = paymentRequest.BankBranch,
+                BusinessManager = userManager.FindById(paymentRequest.BusinessManagerId).UserName,
+                BusinessManagerComments = paymentRequest.BusinessManagerComments,
+                BusinessManagerCommentsTimestamp = paymentRequest.BusinessManagerCommentsTimestamp,
+                Employee = userManager.FindById(paymentRequest.EmployeeId).UserName,
+                FinanceManager = userManager.FindById(paymentRequest.FinanceManagerId).UserName,
+                FinanceManagerComments = paymentRequest.FinanceManagerComments,
+                FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
+                PaymentRequestId = paymentRequest.PaymentRequestId,
+                Reason = paymentRequest.Reason,
+                StartTimestamp = paymentRequest.StartTimestamp,
+                State = paymentRequest.State,
+                StationAccountId = paymentRequest.StationAccountId,
+                WithdrawedTimestamp = paymentRequest.WithdrawedTimestamp,
+                Notes = paymentRequest.Notes,
+                Station = paymentRequest.Station
+            }
+            );
         }
 
         // GET: PaymentRequest
@@ -82,7 +107,7 @@ namespace FuelTrack.Controllers
                         StationAccountId = paymentRequest.StationAccountId,
                         Amount = paymentRequest.Amount,
                         Reason = paymentRequest.Reason,
-                        EmployeeId = (string)Membership.GetUser().ProviderUserKey,
+                        EmployeeId = System.Web.HttpContext.Current.User.Identity.GetUserId(),
                         StartTimestamp = DateTime.Now,
                         BankBranch = paymentRequest.BankBranch,
                         BankAccountName = paymentRequest.BankAccountName,
@@ -113,13 +138,18 @@ namespace FuelTrack.Controllers
                 return HttpNotFound("请款单未找到.");
             }
 
+            if (paymentRequest.State != PaymentRequestState.Start)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单不是Start状态.");
+            }
+
             var yesOrNo = new SelectList(
-                new List<SelectListItem>() {
+            new List<SelectListItem>() {
                     new SelectListItem() { Text = "否", Value = "No" },
                     new SelectListItem() { Text = "是", Value = "Yes" } },
-                "Value",
-                "Text",
-                0);
+            "Value",
+            "Text",
+            0);
 
             PaymentRequestFinanceManagerApproveViewModel model = new PaymentRequestFinanceManagerApproveViewModel()
             {
@@ -127,7 +157,7 @@ namespace FuelTrack.Controllers
                 BankAccountName = paymentRequest.BankAccountName,
                 BankAccountNumber = paymentRequest.BankAccountNumber,
                 BankBranch = paymentRequest.BankBranch,
-                Employee = Membership.GetUser(Guid.Parse(paymentRequest.EmployeeId)).UserName,
+                Employee = userManager.FindById(paymentRequest.EmployeeId).UserName,
                 PaymentRequestId = paymentRequest.PaymentRequestId,
                 Reason = paymentRequest.Reason,
                 StartTimestamp = paymentRequest.StartTimestamp,
@@ -147,9 +177,14 @@ namespace FuelTrack.Controllers
             {
                 PaymentRequest request = db.PaymentRequests.Find(financeApprove.PaymentRequestId);
 
+                if (request.State != PaymentRequestState.Start)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单不是Start状态.");
+                }
+
                 request.FinanceManagerComments = financeApprove.FinanceManagerComments;
 
-                if(financeApprove.IsApprove == "Yes")
+                if (financeApprove.IsApprove == "Yes")
                 {
                     request.State = PaymentRequestState.FinanceManagerApproved;
                 }
@@ -159,7 +194,7 @@ namespace FuelTrack.Controllers
                 }
 
                 request.FinanceManagerCommentsTimestamp = DateTime.Now;
-                request.FinanceManagerId = (string)Membership.GetUser().ProviderUserKey;          
+                request.FinanceManagerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
                 db.Entry(request).State = EntityState.Modified;
 
@@ -184,6 +219,11 @@ namespace FuelTrack.Controllers
                 return HttpNotFound("请款单未找到.");
             }
 
+            if (paymentRequest.State != PaymentRequestState.FinanceManagerApproved)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单不是FinanceManagerApproved状态.");
+            }
+
             var yesOrNo = new SelectList(
                 new List<SelectListItem>() {
                     new SelectListItem() { Text = "否", Value = "No" },
@@ -198,8 +238,8 @@ namespace FuelTrack.Controllers
                 BankAccountName = paymentRequest.BankAccountName,
                 BankAccountNumber = paymentRequest.BankAccountNumber,
                 BankBranch = paymentRequest.BankBranch,
-                Employee = Membership.GetUser(Guid.Parse(paymentRequest.EmployeeId)).UserName,
-                FinanceManager = Membership.GetUser(Guid.Parse(paymentRequest.FinanceManagerId)).UserName,
+                Employee = userManager.FindById(paymentRequest.EmployeeId).UserName,
+                FinanceManager = userManager.FindById(paymentRequest.FinanceManagerId).UserName,
                 FinanceManagerComments = paymentRequest.FinanceManagerComments,
                 FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
                 PaymentRequestId = paymentRequest.PaymentRequestId,
@@ -221,7 +261,12 @@ namespace FuelTrack.Controllers
             {
                 PaymentRequest request = db.PaymentRequests.Find(businessApprove.PaymentRequestId);
 
-                request.BusinessManagerComments = businessApprove.FinanceManagerComments;
+                if (request.State != PaymentRequestState.FinanceManagerApproved)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单不是FinanceManagerApproved状态.");
+                }
+
+                request.BusinessManagerComments = businessApprove.BusinessManagerComments;
 
                 if (businessApprove.IsApprove == "Yes")
                 {
@@ -229,11 +274,12 @@ namespace FuelTrack.Controllers
                 }
                 else
                 {
-                    request.State = PaymentRequestState.BusinessManagerApproved;
+                    request.State = PaymentRequestState.BusinessManagerRejected;
                 }
 
                 request.BusinessManagerCommentsTimestamp = DateTime.Now;
 
+                request.BusinessManagerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
                 db.Entry(request).State = EntityState.Modified;
 

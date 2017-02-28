@@ -54,20 +54,17 @@
                 @Html.DisplayFor(modelItem => item.BankBranch)
             </td>
             <td>
-                @if (ViewContext.HttpContext.User.IsInRole("Employee"))
-                {
+
                     @Html.ActionLink("取消", "Withdraw", new { id = item.PaymentRequestId }); @Html.Label("|");
-                }
 
-                @if (ViewContext.HttpContext.User.IsInRole("FinanceManager"))
-                {
-                    @Html.ActionLink("财务审批", "FinancialApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
-                }
 
-                @if (ViewContext.HttpContext.User.IsInRole("BusinessManager"))
-                {
+
+                    @Html.ActionLink("财务审批", "FinanceApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
+
+
+
                     @Html.ActionLink("业务审批", "BusinessApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
-                }
+
 
                 @Html.ActionLink("明细", "Details", new { id = item.PaymentRequestId })
             </td>

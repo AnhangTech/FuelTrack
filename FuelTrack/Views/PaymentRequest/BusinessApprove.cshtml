@@ -10,75 +10,6 @@
 <div>
     <h4>ClientBalanceHistory</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Station.StationName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Station.StationName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Reason)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Reason)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Employee)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Employee)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.StartTimestamp)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.StartTimestamp)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.FinanceManager)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FinanceManager)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.FinanceManagerComments)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FinanceManagerComments)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.FinanceManagerCommentsTimestamp)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FinanceManagerCommentsTimestamp)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.BankAccountName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.BankAccountName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.BankAccountNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.BankAccountNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.BankBranch)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.BankBranch)
-        </dd>
-
-    </dl>
 
     @using (Html.BeginForm())
     {
@@ -89,6 +20,106 @@
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
+                @Html.LabelFor(model => model.PaymentRequestId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PaymentRequestId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.PaymentRequestId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            @Html.HiddenFor(model => model.StationAccountId)
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Station.StationName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Station.StationName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Station.StationName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Reason, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Employee, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Employee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Employee, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.StartTimestamp, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.StartTimestamp, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.StartTimestamp, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BankBranch, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BankBranch, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.BankBranch, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BankAccountName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BankAccountName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.BankAccountName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BankAccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FinanceManager, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FinanceManager, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.FinanceManager, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FinanceManagerComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FinanceManagerComments, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.FinanceManagerComments, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FinanceManagerCommentsTimestamp, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FinanceManagerCommentsTimestamp, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.FinanceManagerCommentsTimestamp, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
                 @Html.LabelFor(model => model.BusinessManagerComments, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.BusinessManagerComments, new { htmlAttributes = new { @class = "form-control" } })
@@ -98,7 +129,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.IsApprove, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.IsApprove, Model.YesOrNo, "选择客户")
+                    @Html.DropDownListFor(model => model.IsApprove, Model.YesOrNo, "选择")
                     @Html.ValidationMessageFor(model => model.IsApprove, "", new { @class = "text-danger" })
                 </div>
             </div>

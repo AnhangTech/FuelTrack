@@ -190,7 +190,9 @@ C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.addvalidation.resources
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.UnifyDeliever.resources
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.LoanLimit.resources
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.addloadtype.resources
+C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.AddPaymentRequest.resources
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.csproj.GenerateResource.Cache
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.dll
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.pdb
-C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.AddPaymentRequest.resources
+C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.AddPayRequestApprove.resources
+C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.csprojResolveAssemblyReference.cache
