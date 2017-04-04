@@ -129,7 +129,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.IsApprove, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.IsApprove, Model.YesOrNo, "选择")
+                    @Html.DropDownListFor(model => model.IsApprove, Model.YesOrNo, "否")
                     @Html.ValidationMessageFor(model => model.IsApprove, "", new { @class = "text-danger" })
                 </div>
             </div>

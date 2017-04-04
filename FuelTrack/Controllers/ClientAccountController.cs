@@ -62,7 +62,6 @@ namespace FuelTrack.Controllers
         }
 
         // GET: ClientAccount/Edit/5
-        [Authorize(Roles = "Employee")]
         public ActionResult Edit(long? id)
         {
             if (id == null)

@@ -71,6 +71,9 @@ namespace FuelTrack.Models
         [DisplayName("油站银行支行名称")]
         public string BankBranch { get; set; }
 
+        [DisplayName("取消事由")]
+        public string WithdrawedComments { get; set; }
+
         [DisplayName("取消时间")]
         [DisplayFormat(DataFormatString = "{0:yyyy年MM月dd日 HH:mm:ss}")]
         public DateTime? WithdrawedTimestamp { get; set; }
@@ -267,6 +270,9 @@ namespace FuelTrack.Models
         [DisplayName("业务总监批示时间")]
         [DisplayFormat(DataFormatString = "{0:yyyy年MM月dd日 HH:mm:ss}")]
         public DateTime? BusinessManagerCommentsTimestamp { get; set; }
+
+        [DisplayName("取消事由")]
+        public string WithdrawedComments { get; set; }
 
         [DisplayName("取消时间")]
         [DisplayFormat(DataFormatString = "{0:yyyy年MM月dd日 HH:mm:ss}")]

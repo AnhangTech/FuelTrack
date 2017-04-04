@@ -1,12 +1,12 @@
-﻿@model FuelTrack.Models.PaymentRequestFinanceManagerApproveViewModel
+﻿@model FuelTrack.Models.PaymentRequestDetailsViewModel
 
 @{
-    ViewBag.Title = "财务经理批准";
+    ViewBag.Title = "撤回请款单";
 }
 
-<h2>财务经理批准</h2>
+<h2>撤回请款单</h2>
 
-<h3>是否批准请款?</h3>
+<h3>是否撤回请款?</h3>
 <div>
 
     @using (Html.BeginForm())
@@ -96,20 +96,31 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.FinanceManagerComments, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.FinanceManagerComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.FinanceManagerComments, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                     @Html.ValidationMessageFor(model => model.FinanceManagerComments, "", new { @class = "text-danger" })
                 </div>
             </div>
+
             <div class="form-group">
-                @Html.LabelFor(model => model.IsApprove, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.DropDownListFor(model => model.IsApprove, Model.YesOrNo, "否")
-                    @Html.ValidationMessageFor(model => model.IsApprove, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
                 </div>
             </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.WithdrawedComments, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.WithdrawedComments, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.WithdrawedComments, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="发送" class="btn btn-default" />
+                    <input type="submit" value="撤回" class="btn btn-default" name="action:Save" />
+                    <input type="submit" value="取消" class="btn btn-default" name="action:Cancel" />
                 </div>
             </div>
         </div>

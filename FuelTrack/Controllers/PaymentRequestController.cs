@@ -21,14 +21,15 @@ namespace FuelTrack.Controllers
         // GET: Deposites
         public ActionResult Index(long? accountId)
         {
-            if (accountId == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
             ViewBag.StationAccountId = accountId;
 
-            var requests = db.PaymentRequests.Where(d => d.StationAccountId == accountId);
+            var requests = db.PaymentRequests;
+
+            if (accountId == null)
+            {
+                requests.Where(d => d.StationAccountId == accountId);
+            }
 
             return View(requests.ToList().OrderByDescending(o => o.StartTimestamp));
         }
@@ -52,10 +53,10 @@ namespace FuelTrack.Controllers
                 BankAccountName = paymentRequest.BankAccountName,
                 BankAccountNumber = paymentRequest.BankAccountNumber,
                 BankBranch = paymentRequest.BankBranch,
-                BusinessManager = userManager.FindById(paymentRequest.BusinessManagerId).UserName,
+                BusinessManager = paymentRequest.BusinessManagerId == null ? string.Empty : userManager.FindById(paymentRequest.BusinessManagerId).UserName,
                 BusinessManagerComments = paymentRequest.BusinessManagerComments,
                 BusinessManagerCommentsTimestamp = paymentRequest.BusinessManagerCommentsTimestamp,
-                Employee = userManager.FindById(paymentRequest.EmployeeId).UserName,
+                Employee = paymentRequest.EmployeeId == null ? string.Empty : userManager.FindById(paymentRequest.EmployeeId).UserName,
                 FinanceManager = userManager.FindById(paymentRequest.FinanceManagerId).UserName,
                 FinanceManagerComments = paymentRequest.FinanceManagerComments,
                 FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
@@ -72,6 +73,7 @@ namespace FuelTrack.Controllers
         }
 
         // GET: PaymentRequest
+        [Authorize(Roles = "Employee")]
         public ActionResult Apply(long? stationId)
         {
             if (stationId == null)
@@ -97,6 +99,7 @@ namespace FuelTrack.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public ActionResult Apply([Bind(Include = "StationAccountId, Amount, Reason, BankBranch, BankAccountName, BankAccountNumber")] PaymentRequestApplicationViewModel paymentRequest)
         {
             if (ModelState.IsValid)
@@ -124,6 +127,7 @@ namespace FuelTrack.Controllers
         }
 
         // GET: PaymentRequest
+        [Authorize(Roles = "FinanceManager")]
         public ActionResult FinanceApprove(long? id)
         {
             if (id == null)
@@ -171,6 +175,7 @@ namespace FuelTrack.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "FinanceManager")]
         public ActionResult FinanceApprove([Bind(Include = "StationAccountId, PaymentRequestId, FinanceManagerComments, IsApprove")] PaymentRequestFinanceManagerApproveViewModel financeApprove)
         {
             if (ModelState.IsValid)
@@ -205,6 +210,7 @@ namespace FuelTrack.Controllers
         }
 
         // GET: PaymentRequest
+        [Authorize(Roles = "BusinessManager")]
         public ActionResult BusinessApprove(long? id)
         {
             if (id == null)
@@ -221,7 +227,7 @@ namespace FuelTrack.Controllers
 
             if (paymentRequest.State != PaymentRequestState.FinanceManagerApproved)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单不是FinanceManagerApproved状态.");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单必须是FinanceManagerApproved状态,才能进行业务总监批准.");
             }
 
             var yesOrNo = new SelectList(
@@ -255,11 +261,14 @@ namespace FuelTrack.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "BusinessManager")]
         public ActionResult BusinessApprove([Bind(Include = "StationAccountId, PaymentRequestId, BusinessManagerComments, IsApprove")] PaymentRequestBusinessManagerApproveViewModel businessApprove)
         {
             if (ModelState.IsValid)
             {
                 PaymentRequest request = db.PaymentRequests.Find(businessApprove.PaymentRequestId);
+
+                DateTime now = DateTime.Now;
 
                 if (request.State != PaymentRequestState.FinanceManagerApproved)
                 {
@@ -270,14 +279,109 @@ namespace FuelTrack.Controllers
 
                 if (businessApprove.IsApprove == "Yes")
                 {
-                    request.State = PaymentRequestState.BusinessManagerApproved;
+                    request.State = PaymentRequestState.BusinessManagerApproved;                
+                    
+                    // Add Deposite logs
+                    StationAccount account = db.StationAccounts.Find(businessApprove.StationAccountId);
+                    account.Deposite += request.Amount;
+
+                    var depositeHistory = new DepositeHistory()
+                    {
+                        StationAccountId = businessApprove.StationAccountId
+                    };
+
+                    depositeHistory.Timestamp = now;
+                    depositeHistory.ChangeType = DepositeChangeType.Recharge;
+                    depositeHistory.Amount = request.Amount;
+                    db.DepositeHistories.Add(depositeHistory);
+
+                    db.Entry(account).State = EntityState.Modified;
                 }
                 else
                 {
                     request.State = PaymentRequestState.BusinessManagerRejected;
                 }
 
-                request.BusinessManagerCommentsTimestamp = DateTime.Now;
+                request.BusinessManagerCommentsTimestamp = now;
+                request.BusinessManagerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                db.Entry(request).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index", new { accountId = businessApprove.StationAccountId });
+        }
+
+
+        [Authorize(Roles = "Employee")]
+        public ActionResult Withdraw(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            PaymentRequest paymentRequest = db.PaymentRequests.Find(id.Value);
+
+            if (paymentRequest == null)
+            {
+                return HttpNotFound("请款单未找到.");
+            }
+
+            if (paymentRequest.State == PaymentRequestState.BusinessManagerApproved
+                || paymentRequest.State == PaymentRequestState.BusinessManagerRejected
+                || paymentRequest.State == PaymentRequestState.FinanceManagerRejected)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单批准已完结,无法撤回.");
+            }
+
+            return View(new PaymentRequestDetailsViewModel()
+            {
+                Amount = paymentRequest.Amount,
+                BankAccountName = paymentRequest.BankAccountName,
+                BankAccountNumber = paymentRequest.BankAccountNumber,
+                BankBranch = paymentRequest.BankBranch,
+                BusinessManager = paymentRequest.BusinessManagerId == null ? string.Empty : userManager.FindById(paymentRequest.BusinessManagerId).UserName,
+                BusinessManagerComments = paymentRequest.BusinessManagerComments,
+                BusinessManagerCommentsTimestamp = paymentRequest.BusinessManagerCommentsTimestamp,
+                Employee = userManager.FindById(paymentRequest.EmployeeId).UserName,
+                FinanceManager = paymentRequest.FinanceManagerId == null ? string.Empty : userManager.FindById(paymentRequest.FinanceManagerId).UserName,
+                FinanceManagerComments = paymentRequest.FinanceManagerComments,
+                FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
+                PaymentRequestId = paymentRequest.PaymentRequestId,
+                Reason = paymentRequest.Reason,
+                StartTimestamp = paymentRequest.StartTimestamp,
+                State = paymentRequest.State,
+                StationAccountId = paymentRequest.StationAccountId,
+                WithdrawedTimestamp = paymentRequest.WithdrawedTimestamp,
+                Notes = paymentRequest.Notes,
+                Station = paymentRequest.Station
+            }
+            );
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
+        [MultipleButton(Name = "action", Argument = "Save")]
+        public ActionResult WithdrawSave([Bind(Include = "StationAccountId, PaymentRequestId, WithdrawedComments")] PaymentRequestDetailsViewModel withDrawDetails)
+        {
+            if (ModelState.IsValid)
+            {
+                PaymentRequest request = db.PaymentRequests.Find(withDrawDetails.PaymentRequestId);
+
+                if (request.State == PaymentRequestState.BusinessManagerApproved
+                    || request.State == PaymentRequestState.BusinessManagerRejected
+                    || request.State == PaymentRequestState.FinanceManagerRejected)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单批准已完结,无法撤回.");
+                }
+
+                request.State = PaymentRequestState.Withdrawed;
+
+                request.WithdrawedComments = withDrawDetails.WithdrawedComments;
+
+                request.WithdrawedTimestamp = DateTime.Now;
 
                 request.BusinessManagerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
@@ -286,7 +390,16 @@ namespace FuelTrack.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index", new { accountId = businessApprove.StationAccountId });
+            return RedirectToAction("Index", new { accountId = withDrawDetails.StationAccountId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
+        [MultipleButton(Name = "action", Argument = "Cancel")]
+        public ActionResult WithdrawCancel([Bind(Include = "StationAccountId")] PaymentRequestDetailsViewModel withDrawDetails)
+        {
+            return RedirectToAction("Index", new { accountId = withDrawDetails.StationAccountId });
         }
     }
 }

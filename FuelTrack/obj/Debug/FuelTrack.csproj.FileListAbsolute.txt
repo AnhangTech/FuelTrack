@@ -196,3 +196,4 @@ C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.dll
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.pdb
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.AddPayRequestApprove.resources
 C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.csprojResolveAssemblyReference.cache
+C:\FuelTrack\FuelTrack\obj\Debug\FuelTrack.Migrations.addWithDrawComments.resources

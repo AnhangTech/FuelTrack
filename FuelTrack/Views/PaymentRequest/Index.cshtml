@@ -4,11 +4,13 @@
     ViewBag.Title = "请款单列表";
 }
 
-<h2>客户订单列表</h2>
-
-<p>
-    @Html.ActionLink("新建请款单", "Apply", new { stationId = ViewBag.StationAccountId })
-</p>
+<h2>请款单列表</h2>
+@if (ViewBag.StationAccountId != null)
+{
+    <p>
+        @Html.ActionLink("新建请款单", "Apply", new { stationId = ViewBag.StationAccountId })
+    </p>
+}
 <table class="table">
     <tr>
         <th>
@@ -55,16 +57,14 @@
             </td>
             <td>
 
-                    @Html.ActionLink("取消", "Withdraw", new { id = item.PaymentRequestId }); @Html.Label("|");
+                @Html.ActionLink("撤回", "Withdraw", new { id = item.PaymentRequestId })
+                @Html.Label("|")
 
+                @Html.ActionLink("财务审批", "FinanceApprove", new { id = item.PaymentRequestId })
+                @Html.Label("|")
 
-
-                    @Html.ActionLink("财务审批", "FinanceApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
-
-
-
-                    @Html.ActionLink("业务审批", "BusinessApprove", new { id = item.PaymentRequestId }); @Html.Label("|");
-
+                @Html.ActionLink("业务审批", "BusinessApprove", new { id = item.PaymentRequestId })
+                @Html.Label("|")
 
                 @Html.ActionLink("明细", "Details", new { id = item.PaymentRequestId })
             </td>
