@@ -158,8 +158,7 @@ namespace FuelTrack.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {

@@ -36,7 +36,11 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        <tr class="@(item.State== FuelTrack.Models.PaymentRequestState.Start?"alert-info":
+            item.State== FuelTrack.Models.PaymentRequestState.BusinessManagerApproved?"alert-success":
+            item.State== FuelTrack.Models.PaymentRequestState.BusinessManagerRejected || 
+            item.State == FuelTrack.Models.PaymentRequestState.FinanceManagerRejected?"alert-danger":
+            item.State == FuelTrack.Models.PaymentRequestState.FinanceManagerApproved?"alert-warning":"")">
             <td>
                 @Html.DisplayFor(modelItem => item.Station.StationName)
             </td>
