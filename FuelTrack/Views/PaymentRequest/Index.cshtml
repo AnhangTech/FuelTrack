@@ -67,6 +67,9 @@
                 @Html.Label("|")
 
                 @Html.ActionLink("明细", "Details", new { id = item.PaymentRequestId })
+                @Html.Label("|")
+
+                @Html.ActionLink("打印", "Print", new { id = item.PaymentRequestId })
             </td>
         </tr>
     }

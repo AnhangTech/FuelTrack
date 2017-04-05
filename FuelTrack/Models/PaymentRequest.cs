@@ -24,7 +24,7 @@ namespace FuelTrack.Models
 
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [DisplayName("请款状态")]
         public PaymentRequestState State { get; set; }
@@ -90,7 +90,7 @@ namespace FuelTrack.Models
 
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [DisplayName("请款事由")]
         public string Reason { get; set; }
@@ -128,7 +128,7 @@ namespace FuelTrack.Models
 
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [DisplayName("请款事由")]
         public string Reason { get; set; }
@@ -165,7 +165,7 @@ namespace FuelTrack.Models
 
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [DisplayName("请款状态")]
         public PaymentRequestState State { get; set; }
@@ -223,7 +223,7 @@ namespace FuelTrack.Models
 
         [DisplayName("金额（元）")]
         [DisplayFormat(DataFormatString = "{0:#,##0.00#}")]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [DisplayName("请款状态")]
         public PaymentRequestState State { get; set; }
@@ -277,6 +277,9 @@ namespace FuelTrack.Models
         [DisplayName("取消时间")]
         [DisplayFormat(DataFormatString = "{0:yyyy年MM月dd日 HH:mm:ss}")]
         public DateTime? WithdrawedTimestamp { get; set; }
+
+        [DisplayName("人民币（大写）")]
+        public string AmountCapital { get; set; }
     }
 
     public enum PaymentRequestState

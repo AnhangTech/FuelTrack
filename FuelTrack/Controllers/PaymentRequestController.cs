@@ -72,6 +72,45 @@ namespace FuelTrack.Controllers
             );
         }
 
+        // GET: Deposites/Details/5
+        public ActionResult Print(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var paymentRequest = db.PaymentRequests.Find(id);
+
+            if (paymentRequest == null)
+            {
+                return HttpNotFound();
+            }
+            return View(new PaymentRequestDetailsViewModel()
+            {
+                Amount = paymentRequest.Amount,
+                BankAccountName = paymentRequest.BankAccountName,
+                BankAccountNumber = paymentRequest.BankAccountNumber,
+                BankBranch = paymentRequest.BankBranch,
+                BusinessManager = paymentRequest.BusinessManagerId == null ? string.Empty : userManager.FindById(paymentRequest.BusinessManagerId).UserName,
+                BusinessManagerComments = paymentRequest.BusinessManagerComments,
+                BusinessManagerCommentsTimestamp = paymentRequest.BusinessManagerCommentsTimestamp,
+                Employee = paymentRequest.EmployeeId == null ? string.Empty : userManager.FindById(paymentRequest.EmployeeId).UserName,
+                FinanceManager = userManager.FindById(paymentRequest.FinanceManagerId).UserName,
+                FinanceManagerComments = paymentRequest.FinanceManagerComments,
+                FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
+                PaymentRequestId = paymentRequest.PaymentRequestId,
+                Reason = paymentRequest.Reason,
+                StartTimestamp = paymentRequest.StartTimestamp,
+                State = paymentRequest.State,
+                StationAccountId = paymentRequest.StationAccountId,
+                WithdrawedTimestamp = paymentRequest.WithdrawedTimestamp,
+                Notes = paymentRequest.Notes,
+                Station = paymentRequest.Station,
+                AmountCapital = (new Money(paymentRequest.Amount)).ToString()
+            }
+            );
+        }
+
         // GET: PaymentRequest
         [Authorize(Roles = "Employee")]
         public ActionResult Apply(long? stationId)
@@ -279,11 +318,11 @@ namespace FuelTrack.Controllers
 
                 if (businessApprove.IsApprove == "Yes")
                 {
-                    request.State = PaymentRequestState.BusinessManagerApproved;                
-                    
+                    request.State = PaymentRequestState.BusinessManagerApproved;
+
                     // Add Deposite logs
                     StationAccount account = db.StationAccounts.Find(businessApprove.StationAccountId);
-                    account.Deposite += request.Amount;
+                    account.Deposite += Convert.ToDouble(request.Amount);
 
                     var depositeHistory = new DepositeHistory()
                     {
@@ -292,7 +331,7 @@ namespace FuelTrack.Controllers
 
                     depositeHistory.Timestamp = now;
                     depositeHistory.ChangeType = DepositeChangeType.Recharge;
-                    depositeHistory.Amount = request.Amount;
+                    depositeHistory.Amount = Convert.ToDouble(request.Amount);
                     db.DepositeHistories.Add(depositeHistory);
 
                     db.Entry(account).State = EntityState.Modified;
