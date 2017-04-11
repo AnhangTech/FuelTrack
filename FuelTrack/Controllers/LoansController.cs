@@ -251,30 +251,30 @@ namespace FuelTrack.Controllers
         }
 
         // GET: Loans/Delete/5
-        public ActionResult Delete(long? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Loan loan = db.Loans.Find(id);
-            if (loan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(loan);
-        }
+        //public ActionResult Delete(long? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Loan loan = db.Loans.Find(id);
+        //    if (loan == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(loan);
+        //}
 
-        // POST: Loans/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
-        {
-            Loan loan = db.Loans.Find(id);
-            db.Loans.Remove(loan);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //// POST: Loans/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(long id)
+        //{
+        //    Loan loan = db.Loans.Find(id);
+        //    db.Loans.Remove(loan);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         protected override void Dispose(bool disposing)
         {
