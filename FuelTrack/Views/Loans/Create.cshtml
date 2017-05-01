@@ -65,7 +65,51 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="新建" class="btn btn-default" />
+                @*<input type="submit" value="新建" class="btn btn-default" id="openDialog" />*@
+                <button type="button" class="btn" data-toggle="modal" data-target="#promote" id="openDialog">新建</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" role="dialog" id="promote">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dissmiss="modal">&times;</button>
+                    <h4 class="modal-title">检查输入信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5">客户编号</div>
+                            <div class="col-sm-1 text-info" id="cfmClientAccountId"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">贷款金额（元） </div>
+                            <div class="col-sm-1 text-info" id="cfmStartAmount"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">起始日期 </div>
+                            <div class="col-sm-1 text-info" id="cfmStartDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">不计息天数 </div>
+                            <div class="col-sm-1 text-info" id="cfmFreeDays"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">年利率（%）</div>
+                            <div class="col-sm-1 text-info" id="cfmInterestRate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">备注 </div>
+                            <div class="col-sm-1 text-info" id="cfmNotes"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="确定" class="btn btn-default" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,5 +129,17 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#StartDate").datepicker().datepicker("setDate", new Date());
+        $("#openDialog").click(function () {
+            $('#cfmClientAccountId').text(document.getElementById('ClientAccountId').value);
+            $('#cfmStartAmount').text(document.getElementById('StartAmount').value);
+            $('#cfmStartDate').text(document.getElementById('StartDate').value);
+            $('#cfmFreeDays').text(document.getElementById('FreeDays').value);
+            $('#cfmInterestRate').text(document.getElementById('InterestRate').value);
+            $('#cfmNotes').text(document.getElementById('Notes').value);
+            $('#promote').modal('show');
+        });
     })
+
+
+    //alert(document.getElementById('ClientAccountId').value);
 </script>

@@ -57,7 +57,7 @@ namespace FuelTrack.Controllers
                 BusinessManagerComments = paymentRequest.BusinessManagerComments,
                 BusinessManagerCommentsTimestamp = paymentRequest.BusinessManagerCommentsTimestamp,
                 Employee = paymentRequest.EmployeeId == null ? string.Empty : userManager.FindById(paymentRequest.EmployeeId).UserName,
-                FinanceManager = userManager.FindById(paymentRequest.FinanceManagerId).UserName,
+                FinanceManager = paymentRequest.FinanceManagerId == null ? string.Empty: userManager.FindById(paymentRequest.FinanceManagerId).UserName,
                 FinanceManagerComments = paymentRequest.FinanceManagerComments,
                 FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
                 PaymentRequestId = paymentRequest.PaymentRequestId,
@@ -311,7 +311,7 @@ namespace FuelTrack.Controllers
 
                 if (request.State != PaymentRequestState.FinanceManagerApproved)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "请款单不是FinanceManagerApproved状态.");
+                    return new HttpStatusCodeResult(HttpStatusCode.ExpectationFailed, "请款单不是FinanceManagerApproved状态.");
                 }
 
                 request.BusinessManagerComments = businessApprove.BusinessManagerComments;
