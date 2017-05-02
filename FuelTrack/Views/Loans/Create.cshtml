@@ -63,9 +63,8 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-inline">
             <div class="col-md-offset-2 col-md-10">
-                @*<input type="submit" value="新建" class="btn btn-default" id="openDialog" />*@
                 <button type="button" class="btn" data-toggle="modal" data-target="#promote" id="openDialog">新建</button>
             </div>
         </div>
@@ -75,40 +74,16 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dissmiss="modal">&times;</button>
+                    <button type="button" class="close" data-dissmiss="modal" id="closeDialog">&times;</button>
                     <h4 class="modal-title">检查输入信息</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-5">客户编号</div>
-                            <div class="col-sm-1 text-info" id="cfmClientAccountId"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5">贷款金额（元） </div>
-                            <div class="col-sm-1 text-info" id="cfmStartAmount"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5">起始日期 </div>
-                            <div class="col-sm-1 text-info" id="cfmStartDate"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5">不计息天数 </div>
-                            <div class="col-sm-1 text-info" id="cfmFreeDays"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5">年利率（%）</div>
-                            <div class="col-sm-1 text-info" id="cfmInterestRate"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5">备注 </div>
-                            <div class="col-sm-1 text-info" id="cfmNotes"></div>
-                        </div>
+                    <div class="container" id="cfmTable">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <input type="submit" value="确定" class="btn btn-default" />
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="cancelDialog">取消</button>
                 </div>
             </div>
         </div>
@@ -130,16 +105,25 @@
     $(document).ready(function () {
         $("#StartDate").datepicker().datepicker("setDate", new Date());
         $("#openDialog").click(function () {
-            $('#cfmClientAccountId').text(document.getElementById('ClientAccountId').value);
-            $('#cfmStartAmount').text(document.getElementById('StartAmount').value);
-            $('#cfmStartDate').text(document.getElementById('StartDate').value);
-            $('#cfmFreeDays').text(document.getElementById('FreeDays').value);
-            $('#cfmInterestRate').text(document.getElementById('InterestRate').value);
-            $('#cfmNotes').text(document.getElementById('Notes').value);
+            var divs = $(".form-group");
+
+            divs.each(function () {
+                var innerDiv = " <div class='row'><div class='col-sm-5'>"
+                    + this.children[0].innerText
+                    + "</div><div class='col-sm-2 text-info'>"
+                    + this.children[1].children[0].value
+                    + "</div></div>";
+                $('#cfmTable').append(innerDiv);
+            });
+
             $('#promote').modal('show');
         });
+        $("#closeDialog").click(function () {
+            $('#promote').modal('hide');
+            $("#cfmTable").empty();
+        });
+        $("#cancelDialog").click(function () {
+            $("#cfmTable").empty();
+        });
     })
-
-
-    //alert(document.getElementById('ClientAccountId').value);
 </script>

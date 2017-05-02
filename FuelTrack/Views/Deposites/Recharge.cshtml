@@ -10,7 +10,7 @@
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>余款</h4>
         <hr />
@@ -46,9 +46,28 @@
                 @Html.ValidationMessageFor(model => model.Timestamp, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-inline">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Recharge" class="btn btn-default" />
+                <button type="button" class="btn" data-toggle="modal" data-target="#promote" id="openDialog">充值</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" role="dialog" id="promote">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dissmiss="modal" id="closeDialog">&times;</button>
+                    <h4 class="modal-title">检查输入信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container" id="cfmTable">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="确定" class="btn btn-default" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="cancelDialog">取消</button>
+                </div>
             </div>
         </div>
     </div>
@@ -66,5 +85,26 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#Timestamp").datepicker().datepicker("setDate", new Date());
+        $("#openDialog").click(function () {
+            var divs = $(".form-group");
+
+            divs.each(function () {
+                var innerDiv = " <div class='row'><div class='col-sm-5'>"
+                    + this.children[0].innerText
+                    + "</div><div class='col-sm-2 text-info'>"
+                    + this.children[1].children[0].value
+                    + "</div></div>";
+                $('#cfmTable').append(innerDiv);
+            });
+
+            $('#promote').modal('show');
+        });
+        $("#closeDialog").click(function () {
+            $('#promote').modal('hide');
+            $("#cfmTable").empty();
+        });
+        $("#cancelDialog").click(function () {
+            $("#cfmTable").empty();
+        });
     })
 </script>
