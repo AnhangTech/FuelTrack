@@ -24,14 +24,14 @@ namespace FuelTrack.Controllers
 
             ViewBag.StationAccountId = accountId;
 
-            var requests = db.PaymentRequests;
+            IQueryable<PaymentRequest> result = db.PaymentRequests;
 
-            if (accountId == null)
+            if (accountId != null)
             {
-                requests.Where(d => d.StationAccountId == accountId);
+                result = result.Where(d => d.StationAccountId == accountId);
             }
 
-            return View(requests.ToList().OrderByDescending(o => o.StartTimestamp));
+            return View(result.ToList().OrderByDescending(o => o.StartTimestamp));
         }
 
         // GET: Deposites/Details/5
@@ -57,7 +57,7 @@ namespace FuelTrack.Controllers
                 BusinessManagerComments = paymentRequest.BusinessManagerComments,
                 BusinessManagerCommentsTimestamp = paymentRequest.BusinessManagerCommentsTimestamp,
                 Employee = paymentRequest.EmployeeId == null ? string.Empty : userManager.FindById(paymentRequest.EmployeeId).UserName,
-                FinanceManager = paymentRequest.FinanceManagerId == null ? string.Empty: userManager.FindById(paymentRequest.FinanceManagerId).UserName,
+                FinanceManager = paymentRequest.FinanceManagerId == null ? string.Empty : userManager.FindById(paymentRequest.FinanceManagerId).UserName,
                 FinanceManagerComments = paymentRequest.FinanceManagerComments,
                 FinanceManagerCommentsTimestamp = paymentRequest.FinanceManagerCommentsTimestamp,
                 PaymentRequestId = paymentRequest.PaymentRequestId,
@@ -130,7 +130,10 @@ namespace FuelTrack.Controllers
             PaymentRequestApplicationViewModel model = new PaymentRequestApplicationViewModel()
             {
                 StationAccountId = stationId.Value,
-                Station = stationAccount
+                Station = stationAccount,
+                BankAccountName = stationAccount.BankAccountName,
+                BankBranch = stationAccount.BankBranch,
+                BankAccountNumber = stationAccount.BankAccountNumber
             };
 
             return View(model);

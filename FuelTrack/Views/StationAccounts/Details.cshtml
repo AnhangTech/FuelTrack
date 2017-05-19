@@ -31,6 +31,23 @@
         <dd>
             @Html.DisplayFor(model => model.Deposite)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BankAccountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankAccountName)
+        </dd><dt>
+            @Html.DisplayNameFor(model => model.BankAccountNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BankAccountNumber)
+        </dd><dt>
+            @Html.DisplayNameFor(model => model.BankBranch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BankBranch)
+        </dd>
     </dl>
     <h4>未完成订单</h4>
     <table class="table">
@@ -42,7 +59,7 @@
                 油站名称
             </th>
             <th>
-                启示数量
+                起始数量
             </th>
             <th>
                 剩余数量

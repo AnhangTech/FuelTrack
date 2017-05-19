@@ -25,5 +25,14 @@ namespace FuelTrack.Models
 
         [DisplayName("余款历史")]
         public virtual List<DepositeHistory> DepositeHistory { get; set; }
+
+        [DisplayName("油站银行账户名")]
+        public string BankAccountName { get; set; }
+
+        [DisplayName("油站银行账号")]
+        public string BankAccountNumber { get; set; }
+
+        [DisplayName("油站银行支行名称")]
+        public string BankBranch { get; set; }
     }
 }

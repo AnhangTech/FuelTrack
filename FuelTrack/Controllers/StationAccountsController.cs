@@ -35,6 +35,31 @@ namespace FuelTrack.Controllers
             return View(stationAccount);
         }
 
+
+        public JsonResult DetailsJson(long id)
+        {
+            StationAccount stationAccount = db.StationAccounts.Find(id);
+
+            if (stationAccount == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+                return Json("Station Not Found",
+                JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(
+                new
+                {
+                    StationAccountId = stationAccount.StationAccountId,
+                    Name = stationAccount.StationName,
+                    BankAccountName = stationAccount.BankAccountName,
+                    BankAccountNumber = stationAccount.BankAccountNumber,
+                    Deposite = stationAccount.Deposite              
+                }, 
+                JsonRequestBehavior.AllowGet);
+        }
+
         // GET: StationAccounts/Create
         public ActionResult Create()
         {
@@ -46,7 +71,7 @@ namespace FuelTrack.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StationAccountId,StationName")] StationAccount stationAccount)
+        public ActionResult Create([Bind(Include = "StationAccountId,StationName,BankAccountName,BankAccountNumber,BankBranch")] StationAccount stationAccount)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +103,7 @@ namespace FuelTrack.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StationAccountId,StationName")] StationAccount stationAccount)
+        public ActionResult Edit([Bind(Include = "StationAccountId,StationName,BankAccountName,BankAccountNumber,BankBranch")] StationAccount stationAccount)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +135,7 @@ namespace FuelTrack.Controllers
         public ActionResult DeleteConfirmed(long id)
         {
             StationAccount stationAccount = db.StationAccounts.Find(id);
-            db.StationAccounts.Remove(stationAccount);
+            //db.StationAccounts.Remove(stationAccount);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
