@@ -144,8 +144,8 @@ namespace FuelTrack.Controllers
                                        on s.SubscriptionId equals sh.SubscriptionId
                                  where s.StationAccountId == account.StationAccountId
                                     && sh.Timestamp < endRange
-                                    && (sh.State == SubscriptionState.Paid) &&
-                                    (s.State == SubscriptionState.Paid || s.State == SubscriptionState.PartialDelivered)
+                                    && (sh.State == SubscriptionState.Paid) 
+                                    //&& (s.State == SubscriptionState.Paid || s.State == SubscriptionState.PartialDelivered)
                                  select (double?)sh.Quantity).Sum() ?? 0.0;
 
             var deliveredQuantities = (from s in context.Subscriptions
@@ -154,8 +154,8 @@ namespace FuelTrack.Controllers
                                              on s.SubscriptionId equals sh.SubscriptionId
                                        where s.StationAccountId == account.StationAccountId
                                           && sh.Timestamp < endRange
-                                          && sh.State == SubscriptionState.PartialDelivered &&
-                                          (s.State == SubscriptionState.Paid || s.State == SubscriptionState.PartialDelivered || s.State== SubscriptionState.Refunded)
+                                          && (sh.State == SubscriptionState.PartialDelivered || sh.State == SubscriptionState.Delivered || sh.State == SubscriptionState.Refunded) &&
+                                          (s.State == SubscriptionState.Paid || s.State == SubscriptionState.PartialDelivered || s.State== SubscriptionState.Refunded || s.State == SubscriptionState.Closed || s.State== SubscriptionState.Delivered)
                                        select (double?)sh.Quantity).Sum() ?? 0.0;
 
             double incompleteQuantity = allQuantities - deliveredQuantities;
