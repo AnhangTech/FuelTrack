@@ -125,6 +125,18 @@ namespace FuelTrack.Controllers
                                   && sh.Timestamp < endRange
                                   && (sh.State == SubscriptionState.Paid)
                                select (double?)sh.Quantity).Sum() ?? 0.0;
+            double refundQuantity = (from s in context.Subscriptions
+                                     join
+                                           sh in context.SubscriptionHistories
+                                           on s.SubscriptionId equals sh.SubscriptionId
+                                     where s.StationAccountId == account.StationAccountId
+                                     && sh.Timestamp >= startDate
+                                        && sh.Timestamp < endRange
+                                        && (sh.State == SubscriptionState.Refunded)
+                                     select (double?)sh.Quantity).Sum() ?? 0.0;
+
+            quantity = quantity - refundQuantity;
+
 
             var allQuantities = (from s in context.Subscriptions
                                  join
@@ -143,7 +155,7 @@ namespace FuelTrack.Controllers
                                        where s.StationAccountId == account.StationAccountId
                                           && sh.Timestamp < endRange
                                           && sh.State == SubscriptionState.PartialDelivered &&
-                                          (s.State == SubscriptionState.Paid || s.State == SubscriptionState.PartialDelivered)
+                                          (s.State == SubscriptionState.Paid || s.State == SubscriptionState.PartialDelivered || s.State== SubscriptionState.Refunded)
                                        select (double?)sh.Quantity).Sum() ?? 0.0;
 
             double incompleteQuantity = allQuantities - deliveredQuantities;
@@ -152,7 +164,7 @@ namespace FuelTrack.Controllers
                                     where dh.StationAccountId == account.StationAccountId
                                          && dh.Timestamp < endRange
                                          && dh.Timestamp >= startDate
-                                         && (dh.ChangeType == DepositeChangeType.Pay)
+                                         && (dh.ChangeType == DepositeChangeType.Pay || dh.ChangeType == DepositeChangeType.Refund)
                                     select (double?)dh.Amount).Sum() ?? 0.0);
 
             double amount = (from s in context.Subscriptions
@@ -163,6 +175,17 @@ namespace FuelTrack.Controllers
                              && sh.Timestamp < endRange
                                   && sh.Timestamp >= startDate && sh.State == SubscriptionState.Paid
                              select (double?)(sh.Quantity * sh.UnitPrice)).Sum() ?? 0.0;
+
+            double refundAmount = (from s in context.Subscriptions
+                                   join
+                                         sh in context.SubscriptionHistories
+                         on s.SubscriptionId equals sh.SubscriptionId
+                                   where s.StationAccountId == account.StationAccountId
+                                   && sh.Timestamp < endRange
+                                        && sh.Timestamp >= startDate && sh.State == SubscriptionState.Refunded
+                                   select (double?)(sh.Quantity * sh.UnitPrice)).Sum() ?? 0.0;
+
+            amount = amount - refundAmount;
 
             return new StationStatisticsViewModel()
             {
