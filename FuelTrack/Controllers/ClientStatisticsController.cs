@@ -151,6 +151,16 @@ namespace FuelTrack.Controllers
                                        select (double?)csh.Quantity).Sum() ?? 0.0;
 
 
+            var refundedQuantities = (from cs in context.ClientSubscriptions
+                                      join csh in context.ClientSubscriptionHistories
+                                      on cs.ClientSubscriptionId equals csh.ClientSubscriptionId
+                                      where cs.ClientAccountId == account.ClientAccountId
+                                      && csh.Timestamp < endRange
+                                          && csh.State == ClientSubscriptionState.Refunded
+                                      select (double?)csh.Quantity).Sum() ?? 0.0;
+
+            quantity = quantity - refundedQuantities;
+
             double incompleteQuantity = allQuantities - deliveredQuantities;
 
             double payment = -1 * ((from bh in context.ClientBalanceHistories
@@ -160,6 +170,15 @@ namespace FuelTrack.Controllers
                                              && (bh.BalanceType == BalanceChangeType.Pay)
                                     select (double?)bh.Amount).Sum() ?? 0.0);
 
+            double refunded = -1 * ((from bh in context.ClientBalanceHistories
+                                     where bh.ClientAccountId == account.ClientAccountId
+                                              && bh.Timestamp < endRange
+                                              && bh.Timestamp >= startDate
+                                              && (bh.BalanceType == BalanceChangeType.Refund)
+                                     select (double?)bh.Amount).Sum() ?? 0.0);
+
+            payment = payment + refunded;
+
             double amount = (from cs in context.ClientSubscriptions
                              join csh in context.ClientSubscriptionHistories
                              on cs.ClientSubscriptionId equals csh.ClientSubscriptionId
@@ -167,6 +186,8 @@ namespace FuelTrack.Controllers
                              && csh.Timestamp < endRange
                                   && csh.Timestamp >= startDate && csh.State == ClientSubscriptionState.Paid
                              select (double?)(csh.Quantity * csh.UnitPrice)).Sum() ?? 0.0;
+
+            amount = amount + refunded;
 
             var result = (from csh in context.ClientSubscriptionHistories
                           join cs in context.ClientSubscriptions on csh.ClientSubscriptionId equals cs.ClientSubscriptionId
